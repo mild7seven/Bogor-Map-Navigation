@@ -6,7 +6,6 @@ export let isFollowing = false;
 export let recordedPath = [];
 
 export const initGPS = () => {
-    // Siapkan marker biru untuk posisi pengguna
     if (map) {
         const el = document.createElement('div');
         el.style.width = '15px'; el.style.height = '15px';
@@ -21,13 +20,16 @@ export const toggleFollowMe = (btnElement) => {
     if (isFollowing) {
         btnElement.style.backgroundColor = '#4CAF50';
         btnElement.style.color = 'white';
-        if (!userMarker.getMap()) userMarker.addTo(map);
+        
+        // FIX: Pengecekan aman untuk melihat apakah marker sudah ada di peta
+        if (!userMarker._map) {
+            userMarker.addTo(map);
+        }
         
         watchId = navigator.geolocation.watchPosition((pos) => {
             const { latitude, longitude } = pos.coords;
             userMarker.setLngLat([longitude, latitude]);
             
-            // Rekam jejak (Trip Recorder)
             recordedPath.push({ lat: latitude, lng: longitude, time: new Date().toISOString() });
             
             if (isFollowing) map.flyTo({ center: [longitude, latitude], zoom: 16 });

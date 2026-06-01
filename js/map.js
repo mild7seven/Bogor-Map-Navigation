@@ -2,7 +2,6 @@ export let map;
 let routeSourceId = 'route';
 
 export const initMap = () => {
-    // Daftarkan protokol PMTiles
     const protocol = new pmtiles.Protocol();
     maplibregl.addProtocol("pmtiles", protocol.tile);
 
@@ -13,7 +12,7 @@ export const initMap = () => {
             sources: {
                 'bogor-tiles': {
                     type: 'vector',
-                    url: 'pmtiles://bogor.pmtiles' // Sesuaikan path jika file ada di luar folder js
+                    url: 'pmtiles://bogor.pmtiles' 
                 }
             },
             layers: [
@@ -21,11 +20,10 @@ export const initMap = () => {
                     'id': 'background',
                     'type': 'background',
                     'paint': { 'background-color': '#f8f4f0' }
-                },
-                // Tambahkan styling layer jalan dari vector tiles di sini
+                }
             ]
         },
-        center: [106.799, -6.598], // Kebun Raya Bogor
+        center: [106.799, -6.598], 
         zoom: 13
     });
     
@@ -54,8 +52,11 @@ export const drawRouteOnMap = (coordinates) => {
     }
 };
 
-export const clearRoute = () => {
+// Fungsi baru untuk mereset garis rute di peta
+export const clearRouteMap = () => {
     if (map && map.getSource(routeSourceId)) {
-        map.getSource(routeSourceId).setData({ type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [] } });
+        map.getSource(routeSourceId).setData({
+            type: 'Feature', properties: {}, geometry: { type: 'LineString', coordinates: [] }
+        });
     }
 };

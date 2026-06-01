@@ -1,12 +1,11 @@
 import { initDB } from './storage.js';
-import { initMap, drawRouteOnMap, map } from './map.js';
+import { initMap, drawRouteOnMap, clearRouteMap, map } from './map.js';
 import { loadGraph, calculateRoute } from './routing.js';
 import { initSearch, searchPOI } from './search.js';
 import { initGPS, toggleFollowMe, disableFollowOnDrag, recordedPath } from './gps.js';
 import { exportToGPX } from './export.js';
 import { startNavigationMode } from './navigation.js';
 
-// Registrasi Service Worker untuk Offline Mode
 navigator.serviceWorker?.register('sw.js');
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -18,7 +17,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     myMap.on('load', () => {
         initGPS();
         
-        // Logika Klik Peta untuk Rute
         let startPoint = null;
         let endPoint = null;
         let mapMarkers = [];
@@ -26,11 +24,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         myMap.on('click', (e) => {
             const { lat, lng } = e.lngLat;
             
-            if (!startPoint) {
+            // Jika belum ada titik awal ATAU sudah ada rute lengkap sebelumnya (Reset instan)
+            if (!startPoint || (startPoint && endPoint)) {
                 startPoint = {lat, lng};
+                endPoint = null;
+                
+                // Hapus marker dan rute lama dari peta
+                mapMarkers.forEach(m => m.remove());
+                mapMarkers = [];
+                clearRouteMap();
+
                 const m = new maplibregl.Marker({color: 'green'}).setLngLat([lng, lat]).addTo(myMap);
                 mapMarkers.push(m);
-            } else if (!endPoint) {
+            } 
+            // Jika titik awal sudah ada, set tujuan
+            else if (!endPoint) {
                 endPoint = {lat, lng};
                 const m = new maplibregl.Marker({color: 'red'}).setLngLat([lng, lat]).addTo(myMap);
                 mapMarkers.push(m);
@@ -41,39 +49,27 @@ document.addEventListener('DOMContentLoaded', async () => {
                     drawRouteOnMap(rute.path);
                     startNavigationMode(rute);
                 } else {
-                    alert("Rute tidak ditemukan!");
+                    alert("Rute tidak ditemukan! Area tidak terjangkau jaringan jalan.");
                 }
-
-                // Reset setelah 5 detik
-                setTimeout(() => { 
-                    mapMarkers.forEach(m => m.remove()); 
-                    mapMarkers = []; 
-                    startPoint = null; 
-                    endPoint = null; 
-                }, 5000);
             }
         });
 
-        // Event Tombol GPS (Follow Me)
         const btnGPS = document.getElementById('loc');
         if (btnGPS) {
             btnGPS.addEventListener('click', () => toggleFollowMe(btnGPS));
             myMap.on('dragstart', () => disableFollowOnDrag(btnGPS));
         }
 
-        // Event Input Search POI
         const searchInput = document.getElementById('q');
         if (searchInput) {
             searchInput.addEventListener('input', (e) => {
                 const results = searchPOI(e.target.value);
                 if (results.length > 0) {
-                    console.log("Ditemukan:", results);
-                    // Disini Anda bisa membuat dropdown UI, sementara ini kita log
+                    console.log("Pencarian POI:", results);
                 }
             });
         }
         
-        // Event Ekspor GPX (Anda perlu menambahkan <button id="btn-export">Export</button> di index.html)
         const btnExport = document.getElementById('btn-export');
         if (btnExport) {
             btnExport.addEventListener('click', () => exportToGPX(recordedPath));

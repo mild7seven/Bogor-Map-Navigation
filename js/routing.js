@@ -19,7 +19,6 @@ const haversine = (lat1, lon1, lat2, lon2) => {
 export const getNearestNode = (lat, lng) => {
     let nearestId = null, minDistance = Infinity;
     for (let id in graph) {
-        // graph[id][0] adalah lat, graph[id][1] adalah lng
         const dist = haversine(lat, lng, graph[id][0], graph[id][1]);
         if (dist < minDistance) { minDistance = dist; nearestId = id; }
     }
@@ -40,7 +39,6 @@ export const calculateRoute = (startLat, startLng, endLat, endLng) => {
         const current = openSet.shift().id;
 
         if (current === endId) {
-            // Rekonstruksi rute
             const path = [[graph[current][1], graph[current][0]]]; // [lng, lat]
             let curr = current;
             while (cameFrom[curr]) {
@@ -50,12 +48,14 @@ export const calculateRoute = (startLat, startLng, endLat, endLng) => {
             return { distance: gScore[endId].toFixed(2), path };
         }
 
-        // graph[current][2] adalah array edges
         const edges = graph[current][2] || [];
         for (let edge of edges) {
             const neighbor = edge[0]; // ID target
             const weight = edge[1];   // Jarak
             
+            // FIX KRUSIAL: Mencegah error jika node terpotong di perbatasan peta OSM
+            if (!graph[neighbor]) continue; 
+
             const tentativeGScore = gScore[current] + weight;
 
             if (tentativeGScore < (gScore[neighbor] || Infinity)) {
