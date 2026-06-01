@@ -1,0 +1,39 @@
+name: Build Routing Graph
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install OSRM
+        run: |
+          sudo apt update
+          sudo apt install -y osrm-backend
+
+      - name: Extract
+        run: |
+          osrm-extract \
+            -p /usr/share/osrm/profiles/car.lua \
+            data/planet_106.777_-6.604_ffcb9a8a.osm.pbf
+
+      - name: Partition
+        run: |
+          osrm-partition \
+            planet_106.777_-6.604_ffcb9a8a.osrm
+
+      - name: Customize
+        run: |
+          osrm-customize \
+            planet_106.777_-6.604_ffcb9a8a.osrm
+
+      - name: Upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: routing-graph
+          path: |
+            *.osrm*
