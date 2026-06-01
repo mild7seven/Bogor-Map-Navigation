@@ -13,13 +13,13 @@
     <script src="https://unpkg.com/pmtiles@2.11.0/dist/index.js"></script>
 </head>
 <body>
-    <div id="ui-container" style="position: absolute; z-index: 10; top: 10px; left: 10px; display: flex; gap: 5px;">
-        <input id="q" type="text" placeholder="Cari lokasi..." style="padding: 8px;">
-        <button id="loc" style="padding: 8px;">Mulai GPS</button>
-        <button id="btn-export" style="padding: 8px;">Ekspor GPX</button>
+    <div id="ui-container">
+        <input id="q" type="text" placeholder="Cari lokasi...">
+        <button id="loc">Mulai GPS</button>
+        <button id="btn-export">Ekspor GPX</button>
     </div>
     
-    <div id="map" style="width: 100vw; height: 100vh;"></div>
+    <div id="map"></div>
     
     <script type="module" src="js/app.js"></script>
 </body>
