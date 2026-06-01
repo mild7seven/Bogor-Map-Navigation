@@ -1,0 +1,94 @@
+/* Reset dasar dan pengaturan font */
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f8f4f0; /* Sesuai dengan background_color di manifest */
+    overflow: hidden; /* Mencegah scroll tidak sengaja saat menggeser peta di HP */
+}
+
+/* Kontainer Peta */
+#map {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+}
+
+/* Container UI melayang di atas peta */
+#ui-container {
+    position: absolute;
+    z-index: 10;
+    top: 15px;
+    left: 15px;
+    right: 15px; /* Memberi margin di kanan untuk layar kecil */
+    display: flex;
+    flex-wrap: wrap; /* Mengizinkan elemen turun ke baris baru jika layar terlalu sempit */
+    gap: 10px;
+    pointer-events: none; /* Membiarkan klik yang meleset tembus ke peta di bawahnya */
+}
+
+/* Properti umum untuk elemen interaktif di dalam container UI */
+#ui-container > * {
+    pointer-events: auto; /* Mengaktifkan kembali interaksi klik/sentuh */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+/* Kotak Pencarian (Search Bar) */
+#q {
+    flex: 1 1 200px; /* Fleksibel memanjang untuk mengisi ruang kosong */
+    padding: 12px 16px;
+    background-color: white;
+    color: #333;
+}
+
+#q:focus {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Tombol-tombol umum */
+button {
+    padding: 12px 18px;
+    background-color: white;
+    color: #444;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent; /* Menghilangkan highlight biru bawaan browser mobile */
+}
+
+/* Efek saat tombol ditekan */
+button:active {
+    background-color: #e0e0e0;
+    transform: scale(0.97);
+}
+
+/* Tombol Ekspor GPX dengan warna aksen */
+#btn-export {
+    background-color: #007cbf;
+    color: white;
+}
+
+#btn-export:active {
+    background-color: #005f92;
+}
+
+/* Penyesuaian posisi kontrol navigasi/zoom bawaan MapLibre */
+/* Agar tidak bertumpukan dengan UI kustom kita di bagian atas */
+.maplibregl-ctrl-top-right {
+    top: 70px !important;
+}
+
+.maplibregl-ctrl-top-left {
+    top: 70px !important;
+}
