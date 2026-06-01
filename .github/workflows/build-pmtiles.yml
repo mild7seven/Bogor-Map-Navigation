@@ -22,7 +22,9 @@ jobs:
 
       - name: Build PMTiles
         run: |
-          java -Xmx6g -jar planetiler.jar \
+          java -Xmx4g -jar planetiler.jar \
+          --download \
+          --fetch-wikidata=false \
             --osm-path=planet_106.777_-6.604_ffcb9a8a.osm.pbf \
             --output=bogor.pmtiles
 
