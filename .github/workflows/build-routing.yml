@@ -19,7 +19,7 @@ jobs:
         run: |
           osrm-extract \
             -p /usr/share/osrm/profiles/car.lua \
-            data/planet_106.777_-6.604_ffcb9a8a.osm.pbf
+            planet_106.777_-6.604_ffcb9a8a.osm.pbf
 
       - name: Partition
         run: |
