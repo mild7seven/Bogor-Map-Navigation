@@ -12,7 +12,7 @@ jobs:
 
       - name: Download pmtiles tool
         run: |
-          wget https://github.com/protomaps/go-pmtiles/releases/latest/download/pmtiles-linux-amd64
+          wget https://github.com/protomaps/go-pmtiles/releases/download/v1.30.3/go-pmtiles_1.30.3_Linux_arm64.tar.gz
           chmod +x pmtiles-linux-amd64
 
       - name: Show Metadata
