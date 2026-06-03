@@ -21,4 +21,4 @@ jobs:
 
       - name: Show Header
         run: |
-          ./pmtile inspect data/bogor.pmtiles
+          ./pmtiles inspect data/bogor.pmtiles
