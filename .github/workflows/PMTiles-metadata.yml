@@ -22,3 +22,9 @@ jobs:
       - name: Show Header
         run: |
           ./pmtiles show data/bogor.pmtiles --header-json
+          
+      - name: Upload JSON Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: bogor-header-json
+          path: bogor_header.json
