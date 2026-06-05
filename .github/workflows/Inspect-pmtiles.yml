@@ -1,0 +1,20 @@
+name: PMTiles Metadata
+
+on:
+  workflow_dispatch:
+
+jobs:
+  metadata:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download pmtiles tool
+        run: |
+          wget https://github.com/protomaps/go-pmtiles/releases/download/v1.30.3/go-pmtiles_1.30.3_Linux_x86_64.tar.gz
+          tar -xzf go-pmtiles_1.30.3_Linux_x86_64.tar.gz
+          chmod +x pmtiles
+      - name: Show Metadata
+        run: |
+          ./pmtiles inspect data/bogor.pmtiles
